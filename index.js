@@ -137,10 +137,7 @@ var plugin = (Vue => {
 
 
         if (vnode.componentInstance) {
-          vnode.componentInstance.$on(method, () => {
-            // console.log('监听到事件')
-            vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`]);
-          });
+          vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`]);
         } else {
           el.addEventListener(method, eventHandler[`${_uid}-${key}`]);
         }

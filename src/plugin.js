@@ -49,10 +49,7 @@ export default (Vue) => {
         // 这里要知道vue的api方法不仅可以在template中使用，也可以在class中使用的，也是时说你可以@onChange=function，也可vm.on('on-change',function)
         // 这里注意在实例上的方法要使用横线命名的方法，等同于template的驼峰写法。
         if (vnode.componentInstance){
-          vnode.componentInstance.$on(method, () => {
-            // console.log('监听到事件')
-            vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`])
-          })          
+          vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`])          
         } else {
           el.addEventListener(method, eventHandler[`${_uid}-${key}`])
         }
