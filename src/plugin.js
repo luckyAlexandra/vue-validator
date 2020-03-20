@@ -20,8 +20,8 @@ export default (Vue) => {
       const method = Object.keys(modifiers)[0]
 
       // on
-      validatorEmmiter.on(`${_uid}-${key}`, () => {
-        const {
+      validatorEmmiter.on(`${_uid}-${key}`, (type) => {
+        let {
           context: { validateResult, $validator }
         } = vnode
 
@@ -34,14 +34,15 @@ export default (Vue) => {
 
         // console.log('res', result)
 
-        validateResult[key] = isDef(result) ? result.warn : ""
+        validateResult[key] = isDef(result) ? result.warn : "";
+        if (type === 'byModifier') validateResult['curKey'] = isDef(result) ? key : ''
       })
 
       // emit
       if (method) {
         eventHandler[`${_uid}-${key}`] = () => {
           const haveListeners = eventName => validatorEmmiter.listenerCount(eventName)
-          validatorEmmiter.emit(`${_uid}-${key}`)
+          validatorEmmiter.emit(`${_uid}-${key}`, 'byModifier')
         }
 
         // 用户监听组件的事件，来emit对应的规则
@@ -49,7 +50,7 @@ export default (Vue) => {
         // 这里要知道vue的api方法不仅可以在template中使用，也可以在class中使用的，也是时说你可以@onChange=function，也可vm.on('on-change',function)
         // 这里注意在实例上的方法要使用横线命名的方法，等同于template的驼峰写法。
         if (vnode.componentInstance){
-          vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`])          
+          vnode.componentInstance.$on(method, eventHandler[`${_uid}-${key}`])
         } else {
           el.addEventListener(method, eventHandler[`${_uid}-${key}`])
         }
@@ -71,7 +72,7 @@ export default (Vue) => {
           vnode.componentInstance.$off(
             method,
             eventHandler[`${_uid}-${key}`]
-          )          
+          )
         } else {
           el.removeEventListener(method, eventHandler[`${_uid}-${key}`])
         }

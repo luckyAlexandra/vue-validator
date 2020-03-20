@@ -4,7 +4,9 @@ import {validatorEmmiter, isDef} from './util.js'
 export const validatorMixin = {
   data () {
     return {
-      validateResult: {}
+      validateResult: {
+        curKey: ''
+      },
     }
   },
   beforeCreate () {
