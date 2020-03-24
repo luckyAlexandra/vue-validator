@@ -22,7 +22,10 @@ export default {
     }),
     commonjs(),
     babel({
-      exclude: 'node_modules/**'
+      babelrc: false,
+      presets: [['@babel/env', { modules: false }]],
+      exclude: 'node_modules/**',
+      runtimeHelpers: true
     }),
     process.env.NODE_ENV === "production" && uglify()
   ]
